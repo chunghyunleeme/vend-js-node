@@ -7,34 +7,53 @@ const {
 const VendingMachine = require("../main/vendingMaching");
 
 describe("Vending Machine", () => {
-  const cola = new Drink("콜라", 1100);
-  const water = new Drink("물", 600);
-  const coffee = new Drink("커피", 700);
-  let vendingMachine = new VendingMachine(
-    [CashPayment, CardPayment],
-    [cola, water, coffee]
-  );
+  const cola = new Drink("cola", 1100);
+  const water = new Drink("water", 600);
+  const coffee = new Drink("coffee", 700);
+  const FREE_PRICE = 0;
+  let vendingMachine = new VendingMachine([CashPayment, CardPayment], {
+    cola,
+    water,
+    coffee,
+  });
 
   describe("결제 수단 테스트", () => {
     describe("현금 결제", () => {
       it.each(ACCEDPTED_WON)("%p원 결제 성공", (won) => {
-        expect(vendingMachine.verifyPayment(new CashPayment(won))).toBe(true);
+        expect(vendingMachine.verifyPaymentMethod(new CashPayment(won))).toBe(
+          true
+        );
       });
       it("실패", () => {
-        expect(vendingMachine.verifyPayment(new CashPayment(20))).toBe(false);
+        expect(vendingMachine.verifyPaymentMethod(new CashPayment(20))).toBe(
+          false
+        );
       });
     });
 
     describe("카드 결제", () => {
       it("성공", () => {
-        expect(vendingMachine.verifyPayment(new CardPayment())).toBe(true);
+        expect(vendingMachine.verifyPaymentMethod(new CardPayment())).toBe(
+          true
+        );
       });
     });
   });
 
   describe("구매 가능 품목 테스트", () => {
-    it.each(["콜라", "물", "커피"])("%p 구매 요청 성공", (drink) => {
-      expect(vendingMachine.availableDrink(drink)).toBe(true);
+    it.each(["cola", "water", "coffee"])("%p 구매 요청 성공", (drink) => {
+      expect(vendingMachine.isOnSaleList(drink)).toBe(true);
+    });
+
+    it("실패", () => {
+      expect(vendingMachine.isOnSaleList("test")).toBe(false);
+    });
+  });
+
+  describe("구매 요청 테스트", () => {
+    it("성공", () => {
+      const result = vendingMachine.product(new CardPayment(), "cola");
+      console.log("result = ", result);
     });
   });
 });
