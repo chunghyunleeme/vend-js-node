@@ -18,7 +18,6 @@ describe("Vending Machine", () => {
   describe("결제 수단 테스트", () => {
     describe("현금 결제", () => {
       it.each(ACCEDPTED_WON)("%p원 결제 성공", (won) => {
-        console.log("won = ", won);
         expect(vendingMachine.verifyPayment(new CashPayment(won))).toBe(true);
       });
       it("실패", () => {
@@ -30,6 +29,12 @@ describe("Vending Machine", () => {
       it("성공", () => {
         expect(vendingMachine.verifyPayment(new CardPayment())).toBe(true);
       });
+    });
+  });
+
+  describe("구매 가능 품목 테스트", () => {
+    it.each(["콜라", "물", "커피"])("%p 구매 요청 성공", (drink) => {
+      expect(vendingMachine.availableDrink(drink)).toBe(true);
     });
   });
 });
