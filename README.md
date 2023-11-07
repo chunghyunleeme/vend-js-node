@@ -11,3 +11,6 @@
 
 - [ ] 음료수의 재고를 확인한다.
 - [ ] 현금으로 결제할 경우, 잔돈을 확인한다.
+
+TEST
+<img width="386" alt="image" src="https://github.com/chunghyunleeme/vend-js-node/assets/134473987/ce381619-19ae-4cb6-bc79-94ded61868ae">
