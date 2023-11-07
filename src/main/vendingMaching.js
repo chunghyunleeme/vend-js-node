@@ -36,11 +36,37 @@ class VendingMachine {
   }
 
   product(payment, drink) {
-    this.isOnSaleList(drink);
-    this.verifyPaymentMethod(payment);
     const selectedDrink = this.availableDrinks[drink];
-    this.isEnoughPayment(selectedDrink.price, payment.value);
-    return selectedDrink;
+    if (!this.isOnSaleList(drink)) {
+      return new Result({
+        status: FAIL,
+        reason: "verify sale list error",
+      });
+    }
+    if (!this.verifyPaymentMethod(payment)) {
+      return new Result({
+        status: FAIL,
+        reason: "verify payment method error",
+      });
+    }
+    if (!this.isEnoughPayment(selectedDrink.price, payment.value)) {
+      return new Result({
+        status: FAIL,
+        reason: "verify enough money error",
+      });
+    }
+    return new Result({
+      status: SUCCESS,
+      drink: selectedDrink,
+    });
+  }
+}
+
+SUCCESS = "success";
+FAIL = "fail";
+class Result {
+  constructor(result) {
+    this.result = result;
   }
 }
 

@@ -52,8 +52,42 @@ describe("Vending Machine", () => {
 
   describe("구매 요청 테스트", () => {
     it("성공", () => {
-      const result = vendingMachine.product(new CardPayment(), "cola");
-      console.log("result = ", result);
+      console.log(
+        'vendingMachine.product(new CashPayment(10000), "cola") = ',
+        vendingMachine.product(new CashPayment(10000), "cola")
+      );
+      expect(
+        vendingMachine.product(new CashPayment(10000), "cola").result.status
+      ).toBe("success");
+    });
+
+    describe("구매 요청 실패", () => {
+      it("판매중이 아닌 상품 구매", () => {
+        expect(
+          vendingMachine.product(new CashPayment(10000), "test").result.status
+        ).toBe("fail");
+        expect(
+          vendingMachine.product(new CashPayment(10000), "test").result.reason
+        ).toBe("verify sale list error");
+      });
+
+      it("결제 수단 오류", () => {
+        expect(
+          vendingMachine.product(new CashPayment(9999), "cola").result.status
+        ).toBe("fail");
+        expect(
+          vendingMachine.product(new CashPayment(9999), "cola").result.reason
+        ).toBe("verify payment method error");
+      });
+
+      it("금액 부족", () => {
+        expect(
+          vendingMachine.product(new CashPayment(10), "cola").result.status
+        ).toBe("fail");
+        expect(
+          vendingMachine.product(new CashPayment(10), "cola").result.reason
+        ).toBe("verify payment method error");
+      });
     });
   });
 });
